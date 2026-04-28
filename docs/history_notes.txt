@@ -1,1 +1,2 @@
 Update at 2026-04-28T16:00:02: docs: add overview of the history schema
+Update at 2026-04-29T02:52:27: chore: update gitignore for build artifacts
