@@ -4,3 +4,4 @@ Update at 2026-05-02T12:22:11: refactor: simplify host parsing logic
 Update at 2026-05-03T07:08:22: docs: document edge cases in url parsing
 Update at 2026-05-03T18:51:58: test: add initial seed inputs for url fuzzer
 Update at 2026-05-05T02:52:32: chore: improve error messages in sqlite helper
+Update at 2026-05-08T22:40:53: docs: describe chrome profile path locations
