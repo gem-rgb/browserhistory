@@ -6,3 +6,4 @@ Update at 2026-05-03T18:51:58: test: add initial seed inputs for url fuzzer
 Update at 2026-05-05T02:52:32: chore: improve error messages in sqlite helper
 Update at 2026-05-08T22:40:53: docs: describe chrome profile path locations
 Update at 2026-05-10T01:43:53: refactor: clean up unused variables in platform.c
+Update at 2026-05-10T03:23:19: docs: add notes on epoch timestamp conversions
