@@ -8,3 +8,4 @@ Update at 2026-05-08T22:40:53: docs: describe chrome profile path locations
 Update at 2026-05-10T01:43:53: refactor: clean up unused variables in platform.c
 Update at 2026-05-10T03:23:19: docs: add notes on epoch timestamp conversions
 Update at 2026-05-10T18:58:02: test: increase coverage for query parameter parser
+Update at 2026-05-13T01:56:29: docs: explain Brave-specific SQLite structures
