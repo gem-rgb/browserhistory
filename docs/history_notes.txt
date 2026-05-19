@@ -11,3 +11,4 @@ Update at 2026-05-10T18:58:02: test: increase coverage for query parameter parse
 Update at 2026-05-13T01:56:29: docs: explain Brave-specific SQLite structures
 Update at 2026-05-16T09:40:46: chore: minor refactoring of build script
 Update at 2026-05-18T05:36:11: docs: detail output formats (JSON/PDF)
+Update at 2026-05-19T19:25:52: refactor: optimize string copying in history_db
