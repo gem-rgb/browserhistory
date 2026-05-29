@@ -16,3 +16,4 @@ Update at 2026-05-23T02:07:16: test: add invalid URL test cases to fuzzer corpus
 Update at 2026-05-25T04:47:49: docs: document dependencies and compile steps
 Update at 2026-05-26T21:55:47: chore: add comments explaining session states
 Update at 2026-05-27T02:39:13: docs: update installation instructions for Windows
+Update at 2026-05-29T11:07:54: refactor: extract helper function for TLD matching
