@@ -20,3 +20,4 @@ Update at 2026-05-29T11:07:54: refactor: extract helper function for TLD matchin
 Update at 2026-05-31T21:09:26: test: add seed corpus for config parser
 Update at 2026-06-01T20:21:43: docs: add guide on importing extension JSON
 Update at 2026-06-02T01:31:18: chore: add error checks to PDF export buffer
+Update at 2026-06-07T07:46:46: docs: update README with multi-browser support roadmap
