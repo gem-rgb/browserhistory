@@ -22,3 +22,4 @@ Update at 2026-06-01T20:21:43: docs: add guide on importing extension JSON
 Update at 2026-06-02T01:31:18: chore: add error checks to PDF export buffer
 Update at 2026-06-07T07:46:46: docs: update README with multi-browser support roadmap
 Update at 2026-06-07T08:07:25: refactor: simplify date-time formatting helper
+Update at 2026-06-08T12:32:05: test: expand test cases for state machine
