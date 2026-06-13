@@ -27,3 +27,4 @@ Update at 2026-06-09T08:13:19: docs: document browser detection rules
 Update at 2026-06-12T15:19:31: chore: clean up warnings in makefile
 Update at 2026-06-13T04:43:41: docs: explain category rules configuration
 Update at 2026-06-13T05:23:53: refactor: optimize trie node lookup speed
+Update at 2026-06-14T00:24:37: test: add corpus for search query fuzzer
