@@ -25,3 +25,4 @@ Update at 2026-06-07T08:07:25: refactor: simplify date-time formatting helper
 Update at 2026-06-08T12:32:05: test: expand test cases for state machine
 Update at 2026-06-09T08:13:19: docs: document browser detection rules
 Update at 2026-06-12T15:19:31: chore: clean up warnings in makefile
+Update at 2026-06-13T04:43:41: docs: explain category rules configuration
