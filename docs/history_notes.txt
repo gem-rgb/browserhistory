@@ -33,3 +33,4 @@ Update at 2026-06-16T01:22:15: chore: add assertions to parser logic
 Update at 2026-06-16T21:36:11: docs: detail Firefox places.sqlite schema differences
 Update at 2026-06-18T17:52:37: refactor: clean up unused structs in headers
 Update at 2026-06-19T07:03:33: test: add open-ended tests for glob pattern matching
+Update at 2026-06-20T23:44:26: docs: document CSV export format options
