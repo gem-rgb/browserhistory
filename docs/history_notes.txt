@@ -34,3 +34,4 @@ Update at 2026-06-16T21:36:11: docs: detail Firefox places.sqlite schema differe
 Update at 2026-06-18T17:52:37: refactor: clean up unused structs in headers
 Update at 2026-06-19T07:03:33: test: add open-ended tests for glob pattern matching
 Update at 2026-06-20T23:44:26: docs: document CSV export format options
+Update at 2026-06-21T04:55:08: chore: optimize memory usage in session tracker
