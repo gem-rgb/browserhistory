@@ -36,3 +36,4 @@ Update at 2026-06-19T07:03:33: test: add open-ended tests for glob pattern match
 Update at 2026-06-20T23:44:26: docs: document CSV export format options
 Update at 2026-06-21T04:55:08: chore: optimize memory usage in session tracker
 Update at 2026-06-21T10:53:02: docs: describe full-text search syntax
+Update at 2026-06-21T21:29:24: refactor: improve error handling in config parser
