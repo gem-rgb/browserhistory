@@ -39,3 +39,4 @@ Update at 2026-06-21T10:53:02: docs: describe full-text search syntax
 Update at 2026-06-21T21:29:24: refactor: improve error handling in config parser
 Update at 2026-06-23T01:17:02: test: add edge cases for port parsing
 Update at 2026-06-23T04:45:38: docs: document HTML report visualization features
+Update at 2026-06-24T13:11:54: chore: update license and author details
