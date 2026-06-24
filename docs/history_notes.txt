@@ -41,3 +41,4 @@ Update at 2026-06-23T01:17:02: test: add edge cases for port parsing
 Update at 2026-06-23T04:45:38: docs: document HTML report visualization features
 Update at 2026-06-24T13:11:54: chore: update license and author details
 Update at 2026-06-24T18:33:17: docs: add troubleshooting section to README
+Update at 2026-06-24T19:37:27: refactor: clean up unused structs in headers
