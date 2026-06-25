@@ -44,3 +44,4 @@ Update at 2026-06-24T18:33:17: docs: add troubleshooting section to README
 Update at 2026-06-24T19:37:27: refactor: clean up unused structs in headers
 Update at 2026-06-25T05:06:01: test: add corpus files for HTML bookmark importer
 Update at 2026-06-25T06:15:49: docs: update CLI flag help descriptions
+Update at 2026-06-25T17:18:49: chore: optimize trie compaction logic
