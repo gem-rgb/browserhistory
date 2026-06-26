@@ -46,3 +46,4 @@ Update at 2026-06-25T05:06:01: test: add corpus files for HTML bookmark importer
 Update at 2026-06-25T06:15:49: docs: update CLI flag help descriptions
 Update at 2026-06-25T17:18:49: chore: optimize trie compaction logic
 Update at 2026-06-25T19:41:07: docs: document session timeout defaults
+Update at 2026-06-26T23:36:10: refactor: simplify log level filter logic
