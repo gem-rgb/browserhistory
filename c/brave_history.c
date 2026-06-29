@@ -25,6 +25,7 @@
 #include "export_json.h"
 #include "export_pdf.h"
 #include "import_ext.h"
+#include "categorize.h"
 
 /* ── Version ─────────────────────────────────────────────────────── */
 
@@ -259,8 +260,30 @@ skip_db:
     HistoryStats stats;
     history_compute_stats(&result, &stats);
 
+    /* AI-powered browsing analysis */
+    BrowsingAnalysis analysis;
+    analyze_browsing(&result, &analysis);
+
     /* Print summary to console */
     print_summary(&result, &stats);
+
+    /* Print AI insights */
+    printf("  ── AI Insights ──────────────────────────\n");
+    printf("  %s\n", analysis.insight_primary);
+    printf("  %s\n", analysis.insight_focus);
+    printf("  %s\n", analysis.insight_habit);
+    printf("  %s\n", analysis.insight_recommendation);
+    printf("  ─────────────────────────────────────────\n");
+    printf("\n  ── Category Breakdown ────────────────────\n");
+    for (int c = 0; c < CAT_COUNT; c++) {
+        if (analysis.cats[c].count > 0) {
+            printf("  %-16s %4d URLs  %5d visits\n",
+                   category_name((Category)c),
+                   analysis.cats[c].count,
+                   analysis.cats[c].visits);
+        }
+    }
+    printf("  ─────────────────────────────────────────\n\n");
 
     /* Export JSON if requested */
     if (json_path) {
@@ -272,8 +295,8 @@ skip_db:
 
     /* Export PDF if requested */
     if (pdf_path) {
-        printf("  Generating PDF...\n");
-        if (export_to_pdf(&result, &stats, pdf_path) != 0) {
+        printf("  Generating PDF with AI analysis...\n");
+        if (export_to_pdf_analyzed(&result, &stats, &analysis, pdf_path) != 0) {
             fprintf(stderr, "  WARNING: PDF generation failed\n");
         }
     }

@@ -1,0 +1,5 @@
+url,title,visit_count,typed_count,last_visit_time
+https://www.google.com/search?q=test,test - Google Search,15,3,2026-04-27T13:38:10Z
+https://github.com/user/repo,GitHub - user/repo,8,2,2026-04-27T12:00:00Z
+https://stackoverflow.com/questions/12345/test,"javascript - ""How"" to do something?",3,0,2026-04-26T18:30:00Z
+https://en.wikipedia.org/wiki/Main_Page,Wikipedia,25,5,2026-04-27T14:00:00Z

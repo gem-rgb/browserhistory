@@ -562,3 +562,237 @@ int export_to_pdf(const HistoryResult *result, const HistoryStats *stats,
     printf("[export_pdf] Generated %d-page PDF: %s\n", w.page_count, filepath);
     return 0;
 }
+
+/* ── AI Analysis Page Content ────────────────────────────────────── */
+
+static void build_analysis_page(char *buf, size_t bufsize,
+                                 const BrowsingAnalysis *a) {
+    char *p = buf;
+    char *end = buf + bufsize - 512;
+
+    /* Header bar */
+    p += snprintf(p, (size_t)(end-p),
+        "q\n0.13 0.13 0.17 rg\n0 692 612 100 re f\nQ\n"
+        "BT /F2 22 Tf 1 0.6 0.2 rg 50 740 Td "
+        "(AI BROWSING ANALYSIS) Tj ET\n"
+        "BT /F1 10 Tf 0.8 0.8 0.85 rg 50 718 Td "
+        "(Powered by pattern recognition engine) Tj ET\n");
+
+    /* Insight cards */
+    p += snprintf(p, (size_t)(end-p),
+        "BT /F2 13 Tf 0.15 0.15 0.15 rg 50 660 Td "
+        "(Key Insights) Tj ET\n"
+        "q 0.97 0.95 0.92 rg 45 580 522 75 re f Q\n"
+        "BT /F1 9 Tf 0.2 0.2 0.2 rg 55 640 Td (%s) Tj "
+        "0 -16 Td (%s) Tj "
+        "0 -16 Td (%s) Tj "
+        "0 -16 Td (%s) Tj ET\n",
+        a->insight_primary, a->insight_focus,
+        a->insight_habit, a->insight_recommendation);
+
+    /* Productivity score gauge */
+    p += snprintf(p, (size_t)(end-p),
+        "BT /F2 13 Tf 0.15 0.15 0.15 rg 50 560 Td "
+        "(Productivity Score) Tj ET\n"
+        /* Background bar */
+        "q 0.9 0.9 0.9 rg 55 538 400 16 re f Q\n");
+
+    /* Score fill bar - color based on score */
+    float fill = 400.0f * ((float)a->productivity_score / 100.0f);
+    if (a->productivity_score >= 70)
+        p += snprintf(p, (size_t)(end-p),
+            "q 0.2 0.8 0.4 rg 55 538 %.0f 16 re f Q\n", fill);
+    else if (a->productivity_score >= 40)
+        p += snprintf(p, (size_t)(end-p),
+            "q 1.0 0.7 0.2 rg 55 538 %.0f 16 re f Q\n", fill);
+    else
+        p += snprintf(p, (size_t)(end-p),
+            "q 0.9 0.3 0.3 rg 55 538 %.0f 16 re f Q\n", fill);
+
+    p += snprintf(p, (size_t)(end-p),
+        "BT /F2 11 Tf 0.15 0.15 0.15 rg 465 540 Td "
+        "(%d / 100) Tj ET\n", a->productivity_score);
+
+    /* Category breakdown */
+    p += snprintf(p, (size_t)(end-p),
+        "BT /F2 13 Tf 0.15 0.15 0.15 rg 50 505 Td "
+        "(Category Breakdown) Tj ET\n"
+        /* Column headers */
+        "q 0.92 0.92 0.94 rg 45 486 522 16 re f Q\n"
+        "BT /F2 8 Tf 0.15 0.15 0.15 rg "
+        "55 489 Td (Category) Tj "
+        "200 0 Td (URLs) Tj "
+        "60 0 Td (Visits) Tj "
+        "60 0 Td (Top Site) Tj ET\n");
+
+    float cy = 472.0f;
+    for (int c = 0; c < CAT_COUNT && cy > 200.0f; c++) {
+        if (a->cats[c].count == 0) continue;
+
+        /* Alternating rows */
+        if ((c % 2) == 0) {
+            p += snprintf(p, (size_t)(end-p),
+                "q 0.97 0.97 0.98 rg 45 %.0f 522 14 re f Q\n", cy-3);
+        }
+
+        /* Color dot for category */
+        p += snprintf(p, (size_t)(end-p),
+            "q %s rg 55 %.0f 6 6 re f Q\n",
+            category_color((Category)c), cy);
+
+        char top_t[64] = "";
+        if (a->cats[c].top_title[0]) {
+            size_t tl = strlen(a->cats[c].top_title);
+            if (tl > 25) { memcpy(top_t, a->cats[c].top_title, 22); strcpy(top_t+22, "..."); }
+            else strncpy(top_t, a->cats[c].top_title, sizeof(top_t)-1);
+        }
+        /* Escape parens */
+        char top_esc[128];
+        pdf_escape_string(top_esc, sizeof(top_esc), top_t);
+
+        p += snprintf(p, (size_t)(end-p),
+            "BT /F1 8 Tf 0.2 0.2 0.2 rg "
+            "65 %.0f Td (%s) Tj "
+            "145 0 Td (%d) Tj "
+            "60 0 Td (%d) Tj "
+            "60 0 Td (%s) Tj ET\n",
+            cy, category_name((Category)c),
+            a->cats[c].count, a->cats[c].visits, top_esc);
+        cy -= 16.0f;
+    }
+
+    /* Hourly activity heatmap */
+    p += snprintf(p, (size_t)(end-p),
+        "BT /F2 13 Tf 0.15 0.15 0.15 rg 50 %.0f Td "
+        "(Hourly Activity Heatmap) Tj ET\n", cy - 20);
+    cy -= 40.0f;
+
+    /* Find max for scaling */
+    int max_hv = 1;
+    for (int h = 0; h < 24; h++)
+        if (a->hourly_visits[h] > max_hv) max_hv = a->hourly_visits[h];
+
+    /* Draw 24 bars */
+    float bw = 20.0f;
+    for (int h = 0; h < 24; h++) {
+        float x = 45.0f + (float)h * bw;
+        float ratio = (float)a->hourly_visits[h] / (float)max_hv;
+        float bh = ratio * 60.0f;
+        if (bh < 2.0f && a->hourly_visits[h] > 0) bh = 2.0f;
+
+        /* Color intensity */
+        float r = 1.0f - ratio * 0.8f;
+        float g = 0.6f - ratio * 0.2f;
+        float b = 0.2f;
+        p += snprintf(p, (size_t)(end-p),
+            "q %.2f %.2f %.2f rg %.0f %.0f %.0f %.0f re f Q\n",
+            r, g, b, x, cy, bw - 2, bh);
+
+        /* Hour label */
+        if (h % 3 == 0) {
+            p += snprintf(p, (size_t)(end-p),
+                "BT /F3 6 Tf 0.4 0.4 0.4 rg %.0f %.0f Td (%02d) Tj ET\n",
+                x + 2, cy - 10, h);
+        }
+    }
+
+    /* Footer */
+    p += snprintf(p, (size_t)(end-p),
+        "q 0.13 0.13 0.17 rg 0 0 612 30 re f Q\n"
+        "BT /F1 8 Tf 0.5 0.5 0.55 rg 50 10 Td "
+        "(Brave History Access \\227 AI Analysis) Tj ET\n");
+}
+
+/* ── Analyzed PDF Export ─────────────────────────────────────────── */
+
+int export_to_pdf_analyzed(const HistoryResult *result,
+                            const HistoryStats *stats,
+                            const BrowsingAnalysis *analysis,
+                            const char *filepath) {
+    PdfWriter w;
+    memset(&w, 0, sizeof(w));
+
+    w.f = fopen(filepath, "wb");
+    if (!w.f) {
+        fprintf(stderr, "[export_pdf] Cannot open %s for writing\n", filepath);
+        return -1;
+    }
+
+    char timestamp[64];
+    platform_timestamp_iso8601(timestamp, sizeof(timestamp));
+
+    fprintf(w.f, "%%PDF-1.4\n");
+    fprintf(w.f, "%%%c%c%c%c\n", 0xC0, 0xC1, 0xC2, 0xC3);
+
+    w.catalog_obj_id = pdf_reserve_obj(&w);
+    w.pages_obj_id   = pdf_reserve_obj(&w);
+
+    pdf_begin_obj_id(&w, w.catalog_obj_id);
+    fprintf(w.f, "<< /Type /Catalog /Pages %d 0 R >>\n", w.pages_obj_id);
+    pdf_end_obj(&w);
+
+    w.font_helv_id = pdf_begin_obj(&w);
+    fprintf(w.f, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>\n");
+    pdf_end_obj(&w);
+
+    w.font_helv_bold_id = pdf_begin_obj(&w);
+    fprintf(w.f, "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>\n");
+    pdf_end_obj(&w);
+
+    w.font_courier_id = pdf_begin_obj(&w);
+    fprintf(w.f, "<< /Type /Font /Subtype /Type1 /BaseFont /Courier /Encoding /WinAnsiEncoding >>\n");
+    pdf_end_obj(&w);
+
+    w.resources_id = pdf_begin_obj(&w);
+    fprintf(w.f, "<< /Font << /F1 %d 0 R /F2 %d 0 R /F3 %d 0 R >> >>\n",
+        w.font_helv_id, w.font_helv_bold_id, w.font_courier_id);
+    pdf_end_obj(&w);
+
+    size_t content_bufsize = 128 * 1024;
+    char *content_buf = malloc(content_bufsize);
+    if (!content_buf) { fclose(w.f); return -1; }
+
+    /* Page 1: Cover */
+    build_cover_page(content_buf, content_bufsize, stats, timestamp);
+    w.page_obj_ids[w.page_count++] = write_page(&w, content_buf, w.resources_id);
+
+    /* Page 2: AI Analysis */
+    build_analysis_page(content_buf, content_bufsize, analysis);
+    w.page_obj_ids[w.page_count++] = write_page(&w, content_buf, w.resources_id);
+
+    /* Remaining: History listing */
+    int idx = 0, page_num = 3;
+    while (idx < result->count && w.page_count < MAX_PAGES) {
+        int written = build_listing_page(content_buf, content_bufsize,
+                                          result, idx, page_num);
+        if (written == 0) break;
+        w.page_obj_ids[w.page_count++] = write_page(&w, content_buf, w.resources_id);
+        idx += written;
+        page_num++;
+    }
+
+    free(content_buf);
+
+    /* Pages object LAST */
+    pdf_begin_obj_id(&w, w.pages_obj_id);
+    fprintf(w.f, "<< /Type /Pages /Kids [");
+    for (int i = 0; i < w.page_count; i++)
+        fprintf(w.f, "%d 0 R ", w.page_obj_ids[i]);
+    fprintf(w.f, "] /Count %d >>\n", w.page_count);
+    pdf_end_obj(&w);
+
+    long xref_offset = ftell(w.f);
+    fprintf(w.f, "xref\n0 %d\n", w.obj_count + 1);
+    fprintf(w.f, "0000000000 65535 f \n");
+    for (int i = 1; i <= w.obj_count; i++)
+        fprintf(w.f, "%010ld 00000 n \n", w.offsets[i]);
+
+    fprintf(w.f, "trailer\n<< /Size %d /Root %d 0 R >>\n",
+        w.obj_count + 1, w.catalog_obj_id);
+    fprintf(w.f, "startxref\n%ld\n%%%%EOF\n", xref_offset);
+
+    fclose(w.f);
+    printf("[export_pdf] Generated %d-page PDF with AI analysis: %s\n",
+           w.page_count, filepath);
+    return 0;
+}

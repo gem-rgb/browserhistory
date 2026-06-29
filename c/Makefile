@@ -6,12 +6,19 @@ CFLAGS  = -O2 -Wall -Wextra -Wno-unused-parameter -std=c11
 TARGET  = brave-history
 
 # Source files
-SRCS = brave_history.c \
-       history_db.c    \
-       export_json.c   \
-       export_pdf.c    \
-       import_ext.c    \
-       platform.c      \
+SRCS = brave_history.c         \
+       history_db.c            \
+       export_json.c           \
+       export_pdf.c            \
+       import_ext.c            \
+       categorize.c            \
+       platform.c              \
+       url_parser.c            \
+       csv_import.c            \
+       html_bookmark_import.c  \
+       session_tracker.c       \
+       domain_trie.c           \
+       config_parser.c         \
        vendor/sqlite3.c
 
 # Object files

@@ -1,0 +1,35 @@
+# Build artifacts
+*.o
+*.exe
+*.out
+*.a
+*.so
+*.dylib
+build/
+
+# Node.js
+node_modules/
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+*.swp
+*.swo
+*~
+.vscode/
+.idea/
+
+# Database copies
+*.db
+!c/vendor/*.db
+
+# Fuzzing artifacts
+crash-*
+oom-*
+timeout-*
+slow-unit-*
+fuzz/corpus/**/crash-*

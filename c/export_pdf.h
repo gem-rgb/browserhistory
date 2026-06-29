@@ -8,6 +8,7 @@
 #define EXPORT_PDF_H
 
 #include "history_db.h"
+#include "categorize.h"
 
 /**
  * Generate a styled PDF report from history results.
@@ -24,5 +25,11 @@
  */
 int export_to_pdf(const HistoryResult *result, const HistoryStats *stats,
                   const char *filepath);
+
+/**
+ * Export history to a styled PDF with AI browsing analysis page.
+ */
+int export_to_pdf_analyzed(const HistoryResult *result, const HistoryStats *stats,
+                           const BrowsingAnalysis *analysis, const char *filepath);
 
 #endif /* EXPORT_PDF_H */
