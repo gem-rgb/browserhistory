@@ -1,10 +1,15 @@
 # Build artifacts
 *.o
+*.obj
 *.exe
 *.out
 *.a
 *.so
 *.dylib
+*.pdb
+*.ilk
+*.lib
+*.exp
 build/
 
 # Node.js
@@ -33,3 +38,15 @@ oom-*
 timeout-*
 slow-unit-*
 fuzz/corpus/**/crash-*
+fuzz/corpus/**/oom-*
+
+# Generated reports (user output)
+*.pdf
+!docs/*.pdf
+
+# Temp files
+*.tmp
+*_tmp_copy
+
+# Log files
+*.log

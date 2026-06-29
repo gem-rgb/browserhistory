@@ -1,5 +1,5 @@
 #!/bin/bash -eu
-# ClusterFuzzLite build script for Viewbrowserhistory
+# ClusterFuzzLite build script for ViewBrowserHistory
 #
 # Environment variables set by ClusterFuzzLite:
 #   $CC       - C compiler (clang with sanitizer flags)
@@ -20,13 +20,20 @@ SRCS=(
     c/history_db.c
     c/export_json.c
     c/export_pdf.c
+    c/export_csv.c
+    c/export_html_report.c
+    c/export_markdown.c
     c/categorize.c
+    c/logging.c
     c/url_parser.c
     c/csv_import.c
     c/html_bookmark_import.c
     c/session_tracker.c
     c/domain_trie.c
     c/config_parser.c
+    c/url_categorize.c
+    c/search_engine.c
+    c/browser_detect.c
 )
 
 OBJS=()
@@ -53,7 +60,7 @@ for fuzzer_src in fuzz/*_fuzzer.c; do
         zip -j "$OUT/${fuzzer_name}_seed_corpus.zip" fuzz/corpus/${fuzzer_name}/*
     fi
 
-    # Copy dictionary if it exists
+    # Copy per-fuzzer dictionary if it exists, otherwise use shared dictionary
     if [ -f "fuzz/${fuzzer_name}.dict" ]; then
         cp "fuzz/${fuzzer_name}.dict" "$OUT/${fuzzer_name}.dict"
     elif [ -f "fuzz/dictionary.txt" ]; then
@@ -61,4 +68,4 @@ for fuzzer_src in fuzz/*_fuzzer.c; do
     fi
 done
 
-echo "[build.sh] All fuzzers built successfully"
+echo "[build.sh] Built $(ls $OUT/*_fuzzer 2>/dev/null | wc -l) fuzzers successfully"

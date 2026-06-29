@@ -1,40 +1,62 @@
 @echo off
 REM ────────────────────────────────────────────────────────
-REM  build.bat — Build Brave History Access (C Edition)
-REM  
+REM  build.bat — Build ViewBrowserHistory (C Edition) v3.0
+REM
 REM  Works with either MinGW (gcc) or MSVC (cl).
 REM  Tries gcc first, falls back to cl.
 REM ────────────────────────────────────────────────────────
 
 echo.
-echo  ============================================
-echo   Building Brave History Access - C Edition
-echo  ============================================
+echo  ======================================================
+echo   Building ViewBrowserHistory - C Edition v3.0
+echo  ======================================================
 echo.
+
+set SOURCES=brave_history.c ^
+    history_db.c ^
+    platform.c ^
+    logging.c ^
+    export_json.c ^
+    export_pdf.c ^
+    export_csv.c ^
+    export_html_report.c ^
+    export_markdown.c ^
+    import_ext.c ^
+    categorize.c ^
+    url_parser.c ^
+    csv_import.c ^
+    html_bookmark_import.c ^
+    session_tracker.c ^
+    domain_trie.c ^
+    config_parser.c ^
+    url_categorize.c ^
+    search_engine.c ^
+    browser_detect.c ^
+    vendor\sqlite3.c
+
+set OUTPUT=viewbrowserhistory.exe
 
 REM Try GCC first
 where gcc >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo  Compiler: GCC ^(MinGW^)
-    echo  Compiling...
+    echo  Compiling 21 source files...
+    echo.
     gcc -O2 -Wall -Wextra -Wno-unused-parameter -std=c11 ^
-        -o brave-history.exe ^
-        brave_history.c ^
-        history_db.c ^
-        export_json.c ^
-        export_pdf.c ^
-        import_ext.c ^
-        platform.c ^
-        vendor\sqlite3.c ^
+        -D_GNU_SOURCE -DPLATFORM_WINDOWS ^
+        -o %OUTPUT% ^
+        %SOURCES% ^
         -lshell32 -lole32
     if %ERRORLEVEL% EQU 0 (
         echo.
-        echo  SUCCESS: brave-history.exe built successfully!
+        echo  SUCCESS: %OUTPUT% built successfully!
         echo.
         echo  Usage:
-        echo    brave-history.exe --help
-        echo    brave-history.exe --json history.json
-        echo    brave-history.exe --pdf report.pdf --days 30
+        echo    %OUTPUT% --help
+        echo    %OUTPUT% --all-browsers --html report.html
+        echo    %OUTPUT% --browser firefox --days 30 --csv history.csv
+        echo    %OUTPUT% --search "domain:github.com" --json results.json
+        echo    %OUTPUT% --categorize --markdown analysis.md
         echo.
     ) else (
         echo  ERROR: Compilation failed.
@@ -46,19 +68,15 @@ REM Try MSVC
 where cl >nul 2>&1
 if %ERRORLEVEL% EQU 0 (
     echo  Compiler: MSVC ^(cl.exe^)
-    echo  Compiling...
-    cl /O2 /W3 /Fe:brave-history.exe ^
-        brave_history.c ^
-        history_db.c ^
-        export_json.c ^
-        export_pdf.c ^
-        import_ext.c ^
-        platform.c ^
-        vendor\sqlite3.c ^
+    echo  Compiling 21 source files...
+    echo.
+    cl /O2 /W3 /D_CRT_SECURE_NO_WARNINGS /DPLATFORM_WINDOWS ^
+        /Fe:%OUTPUT% ^
+        %SOURCES% ^
         shell32.lib ole32.lib
     if %ERRORLEVEL% EQU 0 (
         echo.
-        echo  SUCCESS: brave-history.exe built successfully!
+        echo  SUCCESS: %OUTPUT% built successfully!
         echo.
     ) else (
         echo  ERROR: Compilation failed.

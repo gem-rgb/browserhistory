@@ -1,0 +1,1 @@
+regex:"^https?://[a-z]+\.(com|org|net)" after:2024-06-01 before:2024-12-31 visits:10

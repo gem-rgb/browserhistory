@@ -1,0 +1,1 @@
+domain:github.com regex:"pull/[0-9]+" after:2024-01-01 visits:5

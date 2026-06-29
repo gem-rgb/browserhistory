@@ -1,0 +1,1 @@
+"exact phrase" AND domain:stackoverflow.com OR tld:org -"excluded" before:2026-12-31
