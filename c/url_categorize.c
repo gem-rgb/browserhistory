@@ -279,7 +279,7 @@ int cat_engine_init_defaults(CatEngine *engine) {
 
     for (int c = 0; BUILTIN_CATEGORIES[c].name && engine->category_count < CAT_MAX_CATEGORIES; c++) {
         const BuiltinCategory *bc = &BUILTIN_CATEGORIES[c];
-        Category *cat = &engine->categories[engine->category_count];
+        CatCategory *cat = &engine->categories[engine->category_count];
 
         strncpy(cat->name, bc->name, sizeof(cat->name) - 1);
         if (bc->color) strncpy(cat->color, bc->color, sizeof(cat->color) - 1);
@@ -334,7 +334,7 @@ int cat_engine_load_rules_buffer(CatEngine *engine, const char *data,
 
     const char *p = data;
     const char *end = data + data_len;
-    Category *current_cat = NULL;
+    CatCategory *current_cat = NULL;
 
     while (p < end) {
         /* Read one line */
@@ -550,7 +550,7 @@ int cat_categorize_url(const CatEngine *engine, const char *url,
 
     /* Pass 1: Domain matching (fast) */
     for (int c = 0; c < engine->category_count; c++) {
-        const Category *cat = &engine->categories[c];
+        const CatCategory *cat = &engine->categories[c];
 
         for (int r = 0; r < cat->rule_count; r++) {
             const CatRule *rule = &cat->rules[r];
@@ -611,7 +611,7 @@ int cat_categorize_url(const CatEngine *engine, const char *url,
         }
 
         for (int c = 0; c < engine->category_count; c++) {
-            const Category *cat = &engine->categories[c];
+            const CatCategory *cat = &engine->categories[c];
 
             for (int k = 0; k < cat->keyword_count; k++) {
                 char kw_lower[64];

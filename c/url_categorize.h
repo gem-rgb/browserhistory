@@ -53,7 +53,7 @@ typedef struct {
     char      keywords[CAT_MAX_KEYWORDS][64];
     int       keyword_count;
     int       priority;                         /* higher = checked first */
-} Category;
+} CatCategory;
 
 /* ── Categorization result for a single entry ────────────────────── */
 
@@ -76,7 +76,7 @@ typedef struct {
 /* ── Categorization engine ───────────────────────────────────────── */
 
 typedef struct {
-    Category    categories[CAT_MAX_CATEGORIES];
+    CatCategory categories[CAT_MAX_CATEGORIES];
     int         category_count;
     CatStats    stats[CAT_MAX_CATEGORIES + 1];  /* +1 for "Uncategorized" */
     int         total_categorized;

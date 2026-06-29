@@ -43,7 +43,7 @@ if %ERRORLEVEL% EQU 0 (
     echo  Compiling 21 source files...
     echo.
     gcc -O2 -Wall -Wextra -Wno-unused-parameter -std=c11 ^
-        -D_GNU_SOURCE -DPLATFORM_WINDOWS ^
+        -D_GNU_SOURCE ^
         -o %OUTPUT% ^
         %SOURCES% ^
         -lshell32 -lole32
@@ -70,7 +70,7 @@ if %ERRORLEVEL% EQU 0 (
     echo  Compiler: MSVC ^(cl.exe^)
     echo  Compiling 21 source files...
     echo.
-    cl /O2 /W3 /D_CRT_SECURE_NO_WARNINGS /DPLATFORM_WINDOWS ^
+    cl /O2 /W3 /D_CRT_SECURE_NO_WARNINGS ^
         /Fe:%OUTPUT% ^
         %SOURCES% ^
         shell32.lib ole32.lib
