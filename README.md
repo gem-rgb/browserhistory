@@ -1,6 +1,5 @@
 # Brave Browser History Access Tool
-
-> **v2.0** — Three implementations: JavaScript (browser), C (native CLI), Chrome Extension (incognito tracking)
+**v2.0** — Three implementations: JavaScript (browser), C (native CLI), Chrome Extension (incognito tracking)
 
 A comprehensive toolkit for accessing, tracking, and exporting Brave browser history. Three independent implementations target different use cases.
 
